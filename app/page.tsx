@@ -151,6 +151,7 @@ export default function TikTokCareerSimulator() {
   }, [appState]);
 
   const fetchLeaderboard = async () => {
+    if (!supabase) return;
     try {
         const { data, error } = await supabase.from('leaderboard').select('*').order('ovr', { ascending: false }).limit(50);
         if (data && !error) setGlobalLeaderboard(data);
@@ -188,6 +189,7 @@ export default function TikTokCareerSimulator() {
     if (!playerName.trim() || isSaved) return;
     setIsSaved(true);
     try {
+        if (!supabase) return;
         await supabase.from('leaderboard').insert([{ name: playerName, ovr: getOverallRating(), position: answers.position, goals: parseInt(answers.goals) || 0 }]);
     } catch(e){}
     triggerConfetti(true);
